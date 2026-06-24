@@ -1,0 +1,27 @@
+name: uterine_cancer_advisor
+description: 子宮体癌術後補助治療判断支援アプリ（ESMO/NCCN/ESTRO/ESGOガイドライン準拠）
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: 6.1.5+1
+  shared_preferences: 2.5.3
+  google_fonts: 6.2.1
+  flutter_animate: 4.5.0
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/

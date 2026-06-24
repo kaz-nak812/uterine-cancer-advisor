@@ -1,0 +1,37 @@
+{
+    "name": "子宮体癌 治療アドバイザー",
+    "short_name": "体癌Advisor",
+    "description": "FIGO 2023・分子分類・ESMO/NCCNガイドラインに基づく子宮体癌術後治療支援アプリ",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#FFFFFF",
+    "theme_color": "#1565C0",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "categories": ["medical", "health"],
+    "lang": "ja",
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
