@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="FIGO 2023・分子分類・ESMO/NCCNガイドラインに基づく子宮体癌術後治療支援アプリ">
+
+  <!-- PWA: iOS Safari ホーム画面追加対応 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="体癌Advisor">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1565C0">
+
+  <!-- Apple Touch Icon (ホーム画面アイコン) -->
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/Icon-192.png">
+
+  <!-- iOS Splash Screens（主要デバイス対応） -->
+  <!-- iPhone 15 Pro Max / 14 Plus -->
+  <link rel="apple-touch-startup-image"
+        media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)"
+        href="icons/splash-1290x2796.png">
+  <!-- iPhone 15 / 14 Pro -->
+  <link rel="apple-touch-startup-image"
+        media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)"
+        href="icons/splash-1179x2556.png">
+  <!-- iPhone SE / 8 / 7 / 6 -->
+  <link rel="apple-touch-startup-image"
+        media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+        href="icons/splash-750x1334.png">
+  <!-- iPhone 11 / XR -->
+  <link rel="apple-touch-startup-image"
+        media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+        href="icons/splash-828x1792.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>子宮体癌 治療アドバイザー</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* 起動時のちらつき防止 */
+    body {
+      background-color: #1565C0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(r) {
+        for (let reg of r) reg.unregister();
+      });
+      caches.keys().then(function(names) {
+        for (let name of names) caches.delete(name);
+      });
+    }
+  </script>
+  <script src="flutter_bootstrap.js?v=pwa1" async></script>
+</body>
+</html>
