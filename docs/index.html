@@ -226,6 +226,14 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;cursor:pointer}
       '<div style="flex:1;font-size:12px;color:#6B6B72;line-height:1.4">参考：分子分類を用いない場合（2020版 臨床病理学的分類）</div>' +
       '<span style="font-size:13px;font-weight:700">' + esc(v.cp2020) + '</span></div>';
 
+    h += '<div style="margin:18px 4px 8px;display:flex;justify-content:space-between;align-items:baseline"><span class="sec-title">腫瘍登録用</span><span style="font-size:11px;color:#8E8E93">（FIGO 2008・UICC TNM 第8版）</span></div>' +
+      '<div class="grid2" style="margin-top:0">' +
+      '<div class="kv"><div class="kv-k">FIGO 2008</div><div style="font-size:18px;font-weight:800;margin-top:3px">' + esc(v.regFigo) + '</div></div>' +
+      '<div class="kv"><div class="kv-k">TNM</div><div style="font-size:16px;font-weight:800;margin-top:4px;line-height:1.35">' + esc(v.regTnm) + '</div></div></div>' +
+      (v.hasRegNotes ? '<div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;padding:0 4px">' + map(v.regNotes, function (n) {
+        return '<div style="font-size:12px;color:#6B6B72;line-height:1.5">※ ' + esc(n.t) + '</div>';
+      }) + '</div>' : '');
+
     h += '<div style="margin:18px 4px 8px" class="sec-title">判断の根拠となった入力</div>' +
       '<div class="card" style="padding:4px 14px">' + map(v.summary, function (x) {
         return '<div class="sum-row"><span style="color:#6B6B72">' + esc(x.k) + '</span><span style="font-weight:600;text-align:right;color:' + x.vColor + '">' + esc(x.v) + '</span></div>';

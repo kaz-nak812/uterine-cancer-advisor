@@ -129,6 +129,44 @@
     return g3 ? 'INT' : 'LOW';
   }
 
+  // 腫瘍登録用：FIGO 2008（＝UICC TNM 第8版の病期群）とTNM。分子分類・組織型・LVSIは関与しない。
+  function reg2008(s) {
+    const ext = s.ext || [];
+    const notes = [];
+    const pos = v => v === 'mic' || v === 'mac';
+    const nSuffix = v => (v === 'mic' ? 'mi' : '');
+    let T = s.mi === 'ge' ? 'T1b' : 'T1a';
+    if (s.cervix === 'yes') T = 'T2';
+    if (ext.includes('adnexa') || ext.includes('serosa')) T = 'T3a';
+    if (ext.includes('vagina')) T = 'T3b';
+    if (ext.includes('mucosa')) T = 'T4';
+    let N, nSuspect = false;
+    if (pos(s.paln)) N = 'pN2' + nSuffix(s.paln);
+    else if (s.paln === 'imgpos') { N = 'cN2'; nSuspect = true; }
+    else if (pos(s.pln)) N = 'pN1' + nSuffix(s.pln);
+    else if (s.pln === 'imgpos') { N = 'cN1'; nSuspect = true; }
+    else if (['neg', 'itc'].includes(s.pln) || ['neg', 'itc'].includes(s.paln)) N = s.pln === 'itc' || s.paln === 'itc' ? 'pN0(i+)' : 'pN0';
+    else N = 'pNX';
+    const M1 = ext.includes('distant') || ext.includes('abdperi') || ext.includes('pelvperi');
+    const M = M1 ? 'M1' : 'M0';
+    let figo;
+    if (M1) figo = 'IVB';
+    else if (T === 'T4') figo = 'IVA';
+    else if (N.startsWith('pN2') || N === 'cN2') figo = 'IIIC2';
+    else if (N.startsWith('pN1') || N === 'cN1') figo = 'IIIC1';
+    else if (T === 'T3b') figo = 'IIIB';
+    else if (T === 'T3a') figo = 'IIIA';
+    else if (T === 'T2') figo = 'II';
+    else figo = T === 'T1b' ? 'IB' : 'IA';
+    if (nSuspect) figo += '（疑い）';
+    if (nSuspect) notes.push('リンパ節転移は画像所見のみ（病理未確認）のためcN表記');
+    if (N === 'pNX') notes.push('リンパ節の病理学的評価なし（pNX）');
+    if (ext.includes('pelvperi')) notes.push('骨盤腹膜転移：FIGO 2008ではIVB（M1）。FIGO 2023ではIIIB2');
+    if (s.ia3 === 'yes' && ext.includes('adnexa')) notes.push('FIGO 2023のIA3（子宮内膜・卵巣の同時性癌）はFIGO 2008ではIIIA（T3a）');
+    if (s.pln === 'itc' || s.paln === 'itc') notes.push('ITCはpN0(i+)とし病期を上げない');
+    return { figo, tnm: 'p' + T + ' ' + N + ' ' + M, notes };
+  }
+
   const VBT = [['線量', 'HDR 21 Gy／3回（7 Gy/回）が最も一般的'], ['範囲', '21–24 Gy／3–4回、腟粘膜面から深さ5 mmで処方'], ['照射部位', '腟上部1/3〜1/2'], ['EBRT後の追加時', '8–11 Gy／2–3回']];
   const EBRT = [['線量', '45–48.6 Gy／25–27回（1.8 Gy/回、週5回）'], ['照射野', '骨盤（総腸骨〜閉鎖・内外腸骨、腟上部・傍腟組織）'], ['頸部間質浸潤例', 'VBTブースト追加を考慮（8–11 Gy／2–3回）']];
   const pN0 = s => ['neg', 'itc'].includes(s.pln) && ['neg', 'itc', 'img', 'nx'].includes(s.paln);
@@ -239,7 +277,7 @@
       molLabel: definite ? MOL[main.cls].label : cands.map(c => MOL[c].short).filter((x, i, a) => a.indexOf(x) === i).join(' / ') + '（未確定）',
       risk: main.risk, riskInfo: RISK[main.risk],
       recs: recs(main.risk, { cls: main.cls }, s),
-      ici, tests, notes, summary, cp2020: risk2020(s),
+      ici, tests, notes, summary, cp2020: risk2020(s), reg: reg2008(s),
       range: definite ? [] : per.map(p => ({ cls: MOL[p.cls].label, risk: p.risk, riskLabel: RISK[p.risk].label })),
     };
   }
@@ -327,6 +365,8 @@
       range: r.ready ? r.range.map(x => ({ ...x, dot: P.risk[x.risk].bg })) : [], hasRange: r.ready && r.range.length > 0,
       summary: r.ready ? r.summary.map(x => ({ ...x, vColor: x.nd ? P.warnInk : P.ink })) : [],
       cp2020: r.ready ? RISK[r.cp2020].label : '—', cp2020Dot: r.ready ? P.risk[r.cp2020].bg : P.track,
+      regFigo: r.ready ? r.reg.figo : '—', regTnm: r.ready ? r.reg.tnm : '—',
+      regNotes: r.ready ? r.reg.notes.map(t => ({ t })) : [], hasRegNotes: r.ready && r.reg.notes.length > 0,
       lynch: s.mmr === 'd',
       lynchOpen: !!st.lynchOpen,
       openLynch: () => cmp.setState({ lynchOpen: true }),
