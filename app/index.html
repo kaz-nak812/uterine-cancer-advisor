@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="体癌術後ナビ">
+<meta name="theme-color" content="#F2F2F5">
+<title>体癌術後ナビ</title>
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<script src="engine.js"></script>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#F2F2F5;-webkit-text-size-adjust:100%}
+a{color:#2F5FB3}a:hover{color:#1F4A94}
+button{font:inherit;-webkit-tap-highlight-color:transparent;cursor:pointer}
+#app{position:absolute;inset:0;display:flex;flex-direction:column;background:#F2F2F5;color:#1C1C1E;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;overflow:hidden}
+.hdr{flex:none;padding:calc(env(safe-area-inset-top) + 10px) 18px 10px;background:rgba(242,242,245,.94);border-bottom:1px solid rgba(60,60,67,.1)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:#2F5FB3;color:#fff;font-size:13px;font-weight:700;letter-spacing:.04em}
+.link-btn{border:none;background:transparent;color:#2F5FB3;font-size:13px;padding:8px 0;min-height:36px}
+.title{margin-top:8px;font-size:24px;font-weight:800;letter-spacing:-.01em}
+.subtitle{margin-top:2px;font-size:12px;color:#6B6B72}
+.scroll{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 24px}
+.card{background:#fff;border-radius:14px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline}
+.sec-title{font-size:13px;font-weight:700;color:#6B6B72}
+.muted{font-size:12px;color:#8E8E93}
+.legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.legend div{text-align:center;padding:7px 2px;border-radius:8px;font-size:11px;font-weight:700}
+.field{padding:13px 14px;border-bottom:1px solid rgba(60,60,67,.1)}
+.field-head{display:flex;align-items:baseline;gap:8px}
+.field-mark{font-size:10px}
+.field-label{font-size:15px;font-weight:600}
+.field-sub{font-size:12px;color:#8E8E93;margin:2px 0 0 18px}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.opt{flex:none;white-space:nowrap;min-height:40px;padding:0 14px;border-radius:10px;font-size:14px;font-weight:600}
+.f2 .opt{padding:0 13px}
+.banner{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.55}
+.btn{min-height:44px;padding:0 16px;border-radius:10px;border:none;font-weight:600}
+.btn-primary{background:#2F5FB3;color:#fff}
+.btn-plain{background:#F2F2F5;color:#2F5FB3}
+.next{margin-top:16px;width:100%;min-height:50px;border-radius:14px;border:none;background:#2F5FB3;color:#fff;font-size:16px;font-weight:700}
+.tabs{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:rgba(249,249,251,.96);border-top:1px solid rgba(60,60,67,.14);padding:6px 6px calc(env(safe-area-inset-bottom) + 6px)}
+.tab{border:none;background:transparent;min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.tab-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.tab-label{font-size:11px;font-weight:600}
+.risk{border-radius:16px;padding:16px}
+.pill{font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;background:#fff;color:#8A5300}
+.grid2{margin-top:10px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.kv{background:#fff;border-radius:14px;padding:12px 14px}
+.kv-k{font-size:11px;color:#8E8E93;font-weight:600}
+.test{padding:11px 14px;border-top:1px solid rgba(60,60,67,.08);display:flex;gap:10px;align-items:flex-start}
+.badge{flex:none;font-size:11px;font-weight:700;padding:3px 7px;border-radius:6px;color:#fff}
+.lynch-card{margin-top:14px;width:100%;text-align:left;border:none;background:#fff;border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;color:#1C1C1E}
+.ls-icon{flex:none;width:36px;height:36px;border-radius:10px;background:#2E8B57;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.rec{border-radius:14px;padding:12px 14px;display:flex;gap:12px}
+.rec-num{flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.grade{flex:none;font-size:12px;font-weight:700;padding:2px 7px;border-radius:6px;background:#F2F2F5;color:#1C1C1E;font-variant-numeric:tabular-nums}
+.dose{margin-top:8px;border-radius:10px;background:#F6F7FA;border:1px solid #E4E7EE;padding:4px 10px}
+.dose-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;padding:6px 0;border-bottom:1px solid #ECEEF3;font-size:12px;line-height:1.45}
+.dose-row:last-child{border-bottom:none}
+.sum-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(60,60,67,.08);font-size:13px}
+.big-btn{flex:1;min-height:46px;border-radius:12px;border:none;font-weight:700}
+.sheet-wrap{position:absolute;inset:0;background:rgba(0,0,0,.42);display:flex;align-items:flex-end}
+.chk{width:100%;text-align:left;border:none;background:#fff;border-radius:14px;padding:13px 14px;display:flex;gap:12px;align-items:flex-start;color:#1C1C1E}
+.chk-mark{flex:none;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  var E = window.ECEngine;
+  var accent = '#2F5FB3';
+  var P = {
+    accent: accent, track: '#E8E8ED', ink: '#1C1C1E', sub: '#8E8E93', onColor: '#fff', warn: '#C27A12', warnInk: '#A3620A',
+    doneMark: '●', todoMark: '○', doneColor: accent, todoColor: '#C7C7CC',
+    opt: function (on, nd) {
+      return on ? (nd ? { bg: '#C27A12', fg: '#fff', bd: '1px solid #C27A12' } : { bg: accent, fg: '#fff', bd: '1px solid ' + accent })
+        : (nd ? { bg: '#fff', fg: '#8E8E93', bd: '1px dashed #AEAEB2' } : { bg: '#F2F2F5', fg: '#1C1C1E', bd: '1px solid #F2F2F5' });
+    },
+    tab: function (a) { return { fg: a ? accent : '#8E8E93', dotBg: a ? accent : 'transparent', dotFg: a ? '#fff' : '#8E8E93', dotBd: a ? '1.5px solid ' + accent : '1.5px solid #AEAEB2' }; },
+    mol: { POLE: '#2E86C1', MMRd: '#2E8B57', NSMP_L: '#B7871A', NSMP_H: '#A0522D', P53: '#C0392B' },
+    risk: {
+      LOW: { bg: '#2E8B57', fg: '#fff' }, UNC_E: { bg: '#6E6E78', fg: '#fff' }, INT: { bg: '#E2B93B', fg: '#1C1C1E' },
+      HIR: { bg: '#DB7A2E', fg: '#fff' }, HIGH: { bg: '#C0392B', fg: '#fff' }, UNC_A: { bg: '#6E6E78', fg: '#fff' },
+      ADV: { bg: '#4B2A7B', fg: '#fff' }, NONE: { bg: '#E8E8ED', fg: '#6B6B72' }
+    },
+    rec: function (hl) { return { rbg: hl ? '#EEF3FB' : '#fff', rbd: hl ? '1px solid #C9D7F0' : '1px solid #fff', numBg: hl ? accent : '#E8E8ED', numFg: hl ? '#fff' : '#6B6B72' }; },
+    chk: function (on) { return { cbg: on ? '#2E8B57' : '#fff', cfg: on ? '#fff' : '#6B6B72', cbd: on ? '1.5px solid #2E8B57' : '1.5px solid #C7C7CC', tdec: on ? 'line-through' : 'none', top: on ? '0.55' : '1' }; },
+    test: function (strong) { return { tbadge: strong ? '強く推奨' : '推奨', tbadgeBg: strong ? '#C27A12' : '#AEAEB2' }; }
+  };
+
+  var root = document.getElementById('app');
+  var handlers = [];
+  var resetScroll = false;
+
+  // Minimal stand-in for the component the engine's view() expects.
+  var cmp = {
+    state: E.initState({}),
+    setState: function (u) {
+      var patch = typeof u === 'function' ? u(cmp.state) : u;
+      if ('step' in patch && patch.step !== cmp.state.step) resetScroll = true;
+      cmp.state = Object.assign({}, cmp.state, patch);
+      render();
+    },
+    scrollTop: function () { resetScroll = true; }
+  };
+
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function on(fn) { handlers.push(fn); return ' data-h="' + (handlers.length - 1) + '"'; }
+  function map(list, fn) { return (list || []).map(fn).join(''); }
+
+  function fieldHtml(f) {
+    return '<div class="field"><div class="field-head"><span class="field-mark" style="color:' + f.markColor + '">' + f.mark + '</span><span class="field-label">' + esc(f.label) + '</span></div>' +
+      (f.hasSub ? '<div class="field-sub">' + esc(f.sub) + '</div>' : '') +
+      '<div class="opts">' + map(f.opts, function (o) {
+        return '<button class="opt"' + on(o.onClick) + ' style="background:' + o.bg + ';color:' + o.fg + ';border:' + o.bd + '">' + esc(o.label) + '</button>';
+      }) + '</div></div>';
+  }
+
+  function step1(v) {
+    return '<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px">' +
+      '<div class="sec-head"><span class="sec-title">STEP 1 ・ 分子分類</span><span class="muted">' + esc(v.done1Text) + '</span></div>' +
+      '<div class="legend">' + map(v.molLegend, function (m) {
+        return '<div style="background:' + m.bg + ';color:' + m.fg + ';opacity:' + m.op + '">' + esc(m.label) + '</div>';
+      }) + '</div>' +
+      '<div style="padding:10px 12px;border-radius:10px;font-size:14px;font-weight:700;background:' + v.molBg + ';color:' + v.molFg + '">' + esc(v.molText) + '</div>' +
+      '</div>' +
+      '<div class="card" style="margin-top:14px;overflow:hidden">' + map(v.f1, fieldHtml) + '</div>' +
+      (v.lynch ? '<div class="banner" style="background:#E6F3EC;color:#1E6B42">dMMR：判定画面で<b>Lynch症候群スクリーニング</b>へ案内します。</div>' : '') +
+      (v.anyND ? '<div class="banner" style="background:#FFF4E0;color:#8A5300">未実施の検査があります。判定画面で<b>暫定分類</b>と<b>推奨される追加検査</b>を表示します。</div>' : '');
+  }
+
+  function step2(v) {
+    return '<div class="sec-head" style="padding:0 4px 8px"><span class="sec-title">STEP 2 ・ 病理所見</span><span class="muted">必須 ' + esc(v.done2Text) + '</span></div>' +
+      '<div class="card f2" style="overflow:hidden">' + map(v.f2, fieldHtml) + '</div>';
+  }
+
+  function step3(v) {
+    if (!v.ready) {
+      return '<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px">' +
+        '<div style="font-size:17px;font-weight:700">判定待ち</div>' +
+        '<div style="font-size:14px;color:#6B6B72;line-height:1.6">' + esc(v.missingText) + '</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-plain"' + on(v.goStep1) + '>分子分類へ</button><button class="btn btn-primary"' + on(v.goStep2) + '>病理所見へ</button></div>' +
+        '</div>';
+    }
+    var h = '';
+    h += '<div class="risk" style="background:' + v.riskBg + ';color:' + v.riskFg + '">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-size:12px;font-weight:600;opacity:.85">ESGO–ESTRO–ESP 2025 リスク分類</span>' +
+      (v.provisional ? '<span class="pill">暫定</span>' : '') + '</div>' +
+      '<div style="font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-.01em">' + esc(v.riskLabel) + '</div>' +
+      '<div style="font-size:13px;margin-top:2px;opacity:.9">' + esc(v.riskRR) + '</div></div>';
+    h += '<div class="grid2">' +
+      '<div class="kv"><div class="kv-k">FIGO 2023</div><div style="font-size:18px;font-weight:800;margin-top:3px">' + esc(v.stageLabel) + '</div></div>' +
+      '<div class="kv"><div class="kv-k">分子分類</div><div style="font-size:14px;font-weight:700;margin-top:4px;line-height:1.35">' + esc(v.molLabel) + '</div></div></div>';
+
+    if (v.hasTests) {
+      h += '<div class="card" style="margin-top:14px;overflow:hidden">' +
+        '<div style="padding:12px 14px;background:#FFF4E0;color:#8A5300;font-size:14px;font-weight:800">追加検査の推奨</div>' +
+        map(v.tests, function (t) {
+          return '<div class="test"><span class="badge" style="background:' + t.tbadgeBg + '">' + esc(t.tbadge) + '</span>' +
+            '<div><div style="font-size:14px;font-weight:700">' + esc(t.t) + '</div><div style="font-size:12px;color:#6B6B72;margin-top:2px;line-height:1.5">' + esc(t.n) + '</div></div></div>';
+        }) + '</div>';
+    }
+
+    if (v.lynch) {
+      h += '<button class="lynch-card"' + on(v.openLynch) + '><span class="ls-icon">LS</span>' +
+        '<span style="flex:1;min-width:0"><span style="display:block;font-size:15px;font-weight:800">Lynch症候群スクリーニング</span>' +
+        '<span style="display:block;font-size:12px;color:#6B6B72;margin-top:2px;line-height:1.45">dMMRのため遺伝学的評価へ進みます ・ ' + esc(v.lynchDone) + '</span></span>' +
+        '<span style="flex:none;font-size:20px;color:#C7C7CC">›</span></button>';
+    }
+
+    if (v.hasRange) {
+      h += '<div class="card" style="margin-top:14px;padding:12px 14px"><div style="font-size:13px;font-weight:700;color:#6B6B72;margin-bottom:6px">分子分類が確定した場合のリスク</div>' +
+        map(v.range, function (x) {
+          return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0"><span class="dot" style="background:' + x.dot + '"></span><span style="flex:1;font-size:14px">' + esc(x.cls) + '</span><span style="font-size:14px;font-weight:700">' + esc(x.riskLabel) + '</span></div>';
+        }) + '</div>';
+    }
+
+    h += '<div style="margin:18px 4px 8px;display:flex;justify-content:space-between;align-items:baseline"><span class="sec-title">推奨される術後治療</span><span style="font-size:11px;color:#8E8E93">（エビデンス, 推奨度）</span></div>';
+    h += '<div style="display:flex;flex-direction:column;gap:8px">' + map(v.recs, function (r) {
+      return '<div class="rec" style="background:' + r.rbg + ';border:' + r.rbd + '">' +
+        '<span class="rec-num" style="background:' + r.numBg + ';color:' + r.numFg + '">' + r.num + '</span>' +
+        '<div style="flex:1;min-width:0">' +
+        '<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><span style="font-size:15px;font-weight:700;line-height:1.4">' + esc(r.t) + '</span><span class="grade">' + esc(r.g) + '</span></div>' +
+        (r.hasN ? '<div style="font-size:12px;color:#6B6B72;margin-top:4px;line-height:1.55">' + esc(r.n) + '</div>' : '') +
+        (r.hasDose ? '<div class="dose">' + map(r.doseRows, function (d) {
+          return '<div class="dose-row"><span style="color:#6B6B72;font-weight:600">' + esc(d.k) + '</span><span style="color:#1C1C1E;font-weight:600">' + esc(d.v) + '</span></div>';
+        }) + '</div>' : '') +
+        (r.hasTrials ? '<div style="font-size:11px;color:#2F5FB3;margin-top:6px;font-weight:600">根拠：' + esc(r.trials) + '</div>' : '') +
+        '</div></div>';
+    }) + '</div>';
+
+    if (v.hasIci) {
+      var ici = v.ici;
+      h += '<div class="card" style="margin-top:12px;padding:14px;display:flex;flex-direction:column;gap:10px">' +
+        '<div style="font-size:13px;line-height:1.6"><b>ICIについて：</b>' + esc(ici.main) + '</div>' +
+        '<div style="border:1.5px dashed #9AA8C7;border-radius:12px;padding:12px;background:#F6F8FC">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-size:12px;font-weight:800;color:#2F5FB3">' + esc(ici.title) + '</span><span style="font-size:12px;font-weight:700;padding:2px 7px;border-radius:6px;background:#E4E9F4">' + esc(ici.g) + '</span></div>' +
+        '<div style="font-size:14px;font-weight:700;margin-top:6px;line-height:1.45">' + esc(ici.body) + '</div>' +
+        '<div style="font-size:11px;color:#6B6B72;margin-top:6px;line-height:1.55">' + esc(ici.trials) + '</div>' +
+        '<div style="font-size:12px;color:#B03A2E;margin-top:8px;font-weight:700">⚠ ' + esc(ici.caveat) + '</div>' +
+        (v.iciProvisional ? '<div style="font-size:12px;color:#8A5300;margin-top:4px">暫定判定：MMRdかつIII–IVA期が病理学的に確定した場合に該当</div>' : '') +
+        '</div></div>';
+    }
+
+    if (v.hasNotes) {
+      h += '<div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;padding:0 4px">' + map(v.notes, function (n) {
+        return '<div style="font-size:12px;color:#6B6B72;line-height:1.5">※ ' + esc(n.t) + '</div>';
+      }) + '</div>';
+    }
+
+    h += '<div class="card" style="margin-top:14px;padding:12px 14px;display:flex;align-items:center;gap:10px">' +
+      '<span class="dot" style="background:' + v.cp2020Dot + '"></span>' +
+      '<div style="flex:1;font-size:12px;color:#6B6B72;line-height:1.4">参考：分子分類を用いない場合（2020版 臨床病理学的分類）</div>' +
+      '<span style="font-size:13px;font-weight:700">' + esc(v.cp2020) + '</span></div>';
+
+    h += '<div style="margin:18px 4px 8px" class="sec-title">判断の根拠となった入力</div>' +
+      '<div class="card" style="padding:4px 14px">' + map(v.summary, function (x) {
+        return '<div class="sum-row"><span style="color:#6B6B72">' + esc(x.k) + '</span><span style="font-weight:600;text-align:right;color:' + x.vColor + '">' + esc(x.v) + '</span></div>';
+      }) + '</div>';
+    h += '<div style="display:flex;gap:8px;margin-top:14px"><button class="big-btn" style="background:#fff;color:#2F5FB3"' + on(v.goStep2) + '>入力を修正</button><button class="big-btn" style="background:#2F5FB3;color:#fff"' + on(v.reset) + '>新しい症例</button></div>';
+    h += '<div style="margin-top:14px;font-size:10.5px;color:#8E8E93;line-height:1.6;padding:0 4px">出典：Concin N, et al. ESGO–ESTRO–ESP guidelines for the management of patients with endometrial carcinoma: update 2025. Lancet Oncol 2025;26:e423–35. ／ Concin N, et al. Int J Gynecol Cancer 2021;31:12–39. 線量・回数はESGO–ESTRO–ESP「放射線治療の原則」および各試験（PORTEC-2・PORTEC-3・GOG-258）のプロトコールに基づく。実際の線量は放射線治療医の判断による。</div>';
+    return h;
+  }
+
+  function lynchSheet(v) {
+    return '<div class="sheet-wrap" style="z-index:9" data-backdrop="lynch"><div style="width:100%;max-height:88%;display:flex;flex-direction:column;background:#F2F2F5;border-radius:22px 22px 0 0;overflow:hidden">' +
+      '<div style="flex:none;padding:16px 18px 12px;background:#fff;border-bottom:1px solid rgba(60,60,67,.1)">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700;color:#2E8B57">dMMR ・ ' + esc(v.lynchDone) + '</span><button' + on(v.closeLynch) + ' style="border:none;background:transparent;color:#2F5FB3;font-size:15px;font-weight:700;min-height:40px;padding:0 0 0 12px">閉じる</button></div>' +
+      '<div style="font-size:20px;font-weight:800;margin-top:2px">Lynch症候群スクリーニング</div>' +
+      '<div style="font-size:12px;color:#6B6B72;margin-top:4px;line-height:1.5">MMR免疫染色で欠損を認めたため、遺伝学的評価へ進みます。実施した項目をチェックしてください。</div></div>' +
+      '<div class="lynch-scroll" style="flex:1;min-height:0;overflow-y:auto;padding:12px 14px calc(env(safe-area-inset-bottom) + 18px);display:flex;flex-direction:column;gap:8px">' +
+      map(v.lynchSteps, function (x) {
+        return '<button class="chk"' + on(x.onClick) + '><span class="chk-mark" style="background:' + x.cbg + ';color:' + x.cfg + ';border:' + x.cbd + '">' + x.mark + '</span>' +
+          '<span style="flex:1;min-width:0;opacity:' + x.top + '"><span style="display:block;font-size:15px;font-weight:700;text-decoration:' + x.tdec + '">' + esc(x.t) + '</span>' +
+          '<span style="display:block;font-size:12px;color:#6B6B72;margin-top:3px;line-height:1.55">' + esc(x.n) + '</span></span></button>';
+      }) +
+      '<div style="font-size:11px;color:#8E8E93;line-height:1.6;padding:4px 4px 0">ESGO–ESTRO–ESP 2025：MMR免疫染色は全例で推奨（III, A）。Lynch症候群のリスクが高い患者には遺伝カウンセリング・遺伝学的検査・関連癌のサーベイランスを提示（III, B）。</div>' +
+      '</div></div></div>';
+  }
+
+  function disclaimer(v) {
+    return '<div class="sheet-wrap" style="z-index:10"><div style="width:100%;background:#fff;border-radius:22px 22px 0 0;padding:22px 20px calc(env(safe-area-inset-bottom) + 18px);display:flex;flex-direction:column;gap:12px">' +
+      '<div style="font-size:12px;font-weight:700;color:#2F5FB3">新松戸中央総合病院版</div>' +
+      '<div style="font-size:20px;font-weight:800">ご利用にあたって</div>' +
+      '<div style="font-size:13px;line-height:1.7;color:#3A3A3F;display:flex;flex-direction:column;gap:6px">' +
+      '<div>・本アプリは婦人科腫瘍専門医向けの判断補助ツールです。最終的な治療方針は担当医およびキャンサーボードで決定してください。</div>' +
+      '<div>・ESGO–ESTRO–ESP 2025（FIGO 2023）に基づきます。術後補助療法としてのICIは国内保険適応外のため、該当部分は2021版の内容を主に表示し、2025版は補足として示します。</div>' +
+      '<div>・入力内容は端末外へ送信・保存されません。</div></div>' +
+      '<button' + on(v.agree) + ' style="min-height:50px;border-radius:14px;border:none;background:#2F5FB3;color:#fff;font-size:16px;font-weight:700">同意して開始</button>' +
+      '</div></div>';
+  }
+
+  function render() {
+    handlers = [];
+    var v = E.view(cmp, P);
+    var oldScroll = root.querySelector('.scroll');
+    var oldLynch = root.querySelector('.lynch-scroll');
+    var top = oldScroll ? oldScroll.scrollTop : 0;
+    var lynchTop = oldLynch ? oldLynch.scrollTop : 0;
+
+    var h = '<div class="hdr"><div class="hdr-row"><div class="brand">新松戸中央総合病院版</div>' +
+      '<button class="link-btn"' + on(v.openDisclaimer) + '>免責事項</button></div>' +
+      '<div class="title">子宮体癌 術後治療ナビ</div>' +
+      '<div class="subtitle">ESGO–ESTRO–ESP 2025 ・ FIGO 2023 分子分類込み</div></div>';
+    h += '<div class="scroll">' + (v.step1 ? step1(v) : v.step2 ? step2(v) : step3(v)) +
+      (v.notLast ? '<button class="next"' + on(v.next) + '>' + esc(v.nextLabel) + '</button>' : '') + '</div>';
+    h += '<div class="tabs">' + map(v.tabs, function (t) {
+      return '<button class="tab"' + on(t.onClick) + ' style="color:' + t.fg + '"><span class="tab-dot" style="background:' + t.dotBg + ';color:' + t.dotFg + ';border:' + t.dotBd + '">' + t.num + '</span>' +
+        '<span class="tab-label">' + esc(t.label) + ' <span style="opacity:.7">' + esc(t.count) + '</span></span></button>';
+    }) + '</div>';
+    if (v.lynchOpen) h += lynchSheet(v);
+    if (v.showDisclaimer) h += disclaimer(v);
+    root.innerHTML = h;
+
+    root.querySelector('.scroll').scrollTop = resetScroll ? 0 : top;
+    var ls = root.querySelector('.lynch-scroll');
+    if (ls) ls.scrollTop = lynchTop;
+    resetScroll = false;
+  }
+
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-h]');
+    if (b) { handlers[+b.getAttribute('data-h')](); return; }
+    if (e.target.getAttribute('data-backdrop') === 'lynch') cmp.setState({ lynchOpen: false });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
