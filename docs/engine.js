@@ -137,7 +137,7 @@
     const nSuffix = v => (v === 'mic' ? 'mi' : '');
     let T = s.mi === 'ge' ? 'T1b' : 'T1a';
     if (s.cervix === 'yes') T = 'T2';
-    if (ext.includes('adnexa') || ext.includes('serosa')) T = 'T3a';
+    if (ext.includes('adnexa') || ext.includes('serosa') || ext.includes('pelvperi')) T = 'T3a';
     if (ext.includes('vagina')) T = 'T3b';
     if (ext.includes('mucosa')) T = 'T4';
     let N, nSuspect = false;
@@ -147,7 +147,7 @@
     else if (s.pln === 'imgpos') { N = 'cN1'; nSuspect = true; }
     else if (['neg', 'itc'].includes(s.pln) || ['neg', 'itc'].includes(s.paln)) N = s.pln === 'itc' || s.paln === 'itc' ? 'pN0(i+)' : 'pN0';
     else N = 'pNX';
-    const M1 = ext.includes('distant') || ext.includes('abdperi') || ext.includes('pelvperi');
+    const M1 = ext.includes('distant') || ext.includes('abdperi');
     const M = M1 ? 'M1' : 'M0';
     let figo;
     if (M1) figo = 'IVB';
@@ -161,7 +161,8 @@
     if (nSuspect) figo += '（疑い）';
     if (nSuspect) notes.push('リンパ節転移は画像所見のみ（病理未確認）のためcN表記');
     if (N === 'pNX') notes.push('リンパ節の病理学的評価なし（pNX）');
-    if (ext.includes('pelvperi')) notes.push('骨盤腹膜転移：FIGO 2008ではIVB（M1）。FIGO 2023ではIIIB2');
+    if (ext.includes('pelvperi') && !M1) notes.push('小骨盤腔内の腹膜転移：FIGO 2008ではIIIA（T3a）。FIGO 2023ではIIIB2');
+    if (ext.includes('abdperi')) notes.push('小骨盤腔を超えた腹腔内転移：FIGO 2008ではIVB（M1）');
     if (s.ia3 === 'yes' && ext.includes('adnexa')) notes.push('FIGO 2023のIA3（子宮内膜・卵巣の同時性癌）はFIGO 2008ではIIIA（T3a）');
     if (s.pln === 'itc' || s.paln === 'itc') notes.push('ITCはpN0(i+)とし病期を上げない');
     return { figo, tnm: 'p' + T + ' ' + N + ' ' + M, notes };
