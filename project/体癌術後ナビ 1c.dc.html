@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="体癌術後ナビ">
+<meta name="theme-color" content="#F6F3EC">
+<link rel="apple-touch-icon" href="icon-c.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;800&display=swap" rel="stylesheet">
+<script src="engine.js"></script>
+<style>html,body{margin:0;height:100%;background:#F6F3EC;-webkit-text-size-adjust:100%}a{color:#2D3E7A}a:hover{color:#1D2A58}button{font:inherit;-webkit-tap-highlight-color:transparent;cursor:pointer}</style>
+</helmet>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;background:#F6F3EC;color:#1D1B16;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP',sans-serif;overflow:hidden">
+  <div ref="{{ scrollRef }}" style="flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <div style="padding:calc(env(safe-area-inset-top) + 18px) 20px 18px;border-bottom:2px solid #1D1B16">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <span style="font-size:11px;letter-spacing:.14em;color:#6E685C">ESGO–ESTRO–ESP 2025 / FIGO 2023</span>
+        <button onClick="{{ openDisclaimer }}" style="border:none;background:transparent;color:#2D3E7A;font-size:12px;text-decoration:underline;min-height:32px;padding:0">免責事項</button>
+      </div>
+      <div style="font-family:'Noto Serif JP','Hiragino Mincho ProN',serif;font-size:30px;font-weight:800;line-height:1.2;margin-top:10px">新松戸中央<br>総合病院版</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px"><span style="height:2px;width:28px;background:#9E2B25"></span><span style="font-size:15px;font-weight:700">子宮体癌 術後治療ナビ</span></div>
+    </div>
+
+    <div style="padding:22px 20px 6px">
+      <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Noto Serif JP',serif;font-size:28px;font-weight:800;color:#9E2B25">01</span><span style="font-family:'Noto Serif JP',serif;font-size:19px;font-weight:800">分子分類</span><span style="margin-left:auto;font-size:12px;color:#6E685C">{{ done1Text }}</span></div>
+      <div style="margin-top:12px;display:flex;gap:4px">
+        <sc-for list="{{ molLegend }}" as="m" hint-placeholder-count="4">
+          <div style="flex:1;padding:6px 0;text-align:center;font-size:10.5px;font-weight:700;border-top:4px solid {{ m.bg }};color:#1D1B16;opacity:{{ m.op }}">{{ m.label }}</div>
+        </sc-for>
+      </div>
+      <div style="margin-top:6px;font-size:14px;font-weight:700;color:#1D1B16">{{ molText }}</div>
+      <sc-for list="{{ f1 }}" as="f" hint-placeholder-count="4">
+        <div style="padding:16px 0;border-bottom:1px solid #DCD5C6">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px"><span style="font-size:15px;font-weight:700">{{ f.label }}</span><span style="font-size:11px;color:{{ f.markColor }}">{{ f.mark }}</span></div>
+          <div style="font-size:12px;color:#6E685C;margin-top:2px">{{ f.sub }}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+            <sc-for list="{{ f.opts }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.onClick }}" style="flex:none;white-space:nowrap;min-height:42px;padding:0 14px;border-radius:2px;font-size:14px;font-weight:600;background:{{ o.bg }};color:{{ o.fg }};border:{{ o.bd }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ anyND }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:14px;padding:10px 0 10px 12px;border-left:3px solid #B9791B;font-size:13px;line-height:1.6;color:#7A4E0E">未実施の検査あり：判定は暫定となります。下の判定欄に推奨検査を示します。</div>
+      </sc-if>
+    </div>
+
+    <div style="padding:26px 20px 6px">
+      <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Noto Serif JP',serif;font-size:28px;font-weight:800;color:#9E2B25">02</span><span style="font-family:'Noto Serif JP',serif;font-size:19px;font-weight:800">病理所見</span><span style="margin-left:auto;font-size:12px;color:#6E685C">必須 {{ done2Text }}</span></div>
+      <sc-for list="{{ f2 }}" as="f" hint-placeholder-count="8">
+        <div style="padding:16px 0;border-bottom:1px solid #DCD5C6">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px"><span style="font-size:15px;font-weight:700">{{ f.label }}</span><span style="font-size:11px;color:{{ f.markColor }}">{{ f.mark }}</span></div>
+          <sc-if value="{{ f.hasSub }}"><div style="font-size:12px;color:#6E685C;margin-top:2px">{{ f.sub }}</div></sc-if>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+            <sc-for list="{{ f.opts }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.onClick }}" style="flex:none;white-space:nowrap;min-height:42px;padding:0 13px;border-radius:2px;font-size:14px;font-weight:600;background:{{ o.bg }};color:{{ o.fg }};border:{{ o.bd }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div ref="{{ resultRef }}" style="padding:26px 20px 30px">
+      <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Noto Serif JP',serif;font-size:28px;font-weight:800;color:#9E2B25">03</span><span style="font-family:'Noto Serif JP',serif;font-size:19px;font-weight:800">判定</span></div>
+      <sc-if value="{{ notReady }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:12px;padding:16px;border:1px dashed #B5AD9C;font-size:13px;line-height:1.7;color:#6E685C">{{ missingText }}</div>
+      </sc-if>
+      <sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:14px;display:flex;gap:14px;align-items:stretch">
+          <div style="width:8px;flex:none;background:{{ riskBg }}"></div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;letter-spacing:.12em;color:#6E685C">{{ riskEn }}</span><sc-if value="{{ provisional }}"><span style="font-size:11px;font-weight:800;padding:2px 8px;border:1.5px solid #B9791B;color:#7A4E0E">暫定</span></sc-if></div>
+            <div style="font-family:'Noto Serif JP',serif;font-size:34px;font-weight:800;line-height:1.2;margin-top:2px;color:{{ riskBg }}">{{ riskLabel }}</div>
+            <div style="font-size:13px;color:#4A463D;margin-top:2px">{{ riskRR }}</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:1px solid #1D1B16;border-bottom:1px solid #1D1B16">
+          <div style="padding:10px 10px 10px 0;border-right:1px solid #DCD5C6"><div style="font-size:11px;color:#6E685C">FIGO 2023</div><div style="font-family:'Noto Serif JP',serif;font-size:20px;font-weight:800;margin-top:2px">{{ stageLabel }}</div></div>
+          <div style="padding:10px 0 10px 12px"><div style="font-size:11px;color:#6E685C">分子分類</div><div style="font-size:14px;font-weight:700;margin-top:4px;line-height:1.35">{{ molLabel }}</div></div>
+        </div>
+
+        <sc-if value="{{ hasTests }}">
+          <div style="margin-top:18px;padding:14px;background:#FBF1DE;border:1px solid #E3CDA0">
+            <div style="font-size:13px;font-weight:800;color:#7A4E0E">追加検査の推奨</div>
+            <sc-for list="{{ tests }}" as="t" hint-placeholder-count="1">
+              <div style="margin-top:10px;display:flex;gap:10px">
+                <span style="flex:none;font-size:10.5px;font-weight:800;padding:2px 6px;height:fit-content;background:{{ t.tbadgeBg }};color:#fff">{{ t.tbadge }}</span>
+                <div><div style="font-size:14px;font-weight:700">{{ t.t }}</div><div style="font-size:12px;color:#6E685C;margin-top:2px;line-height:1.5">{{ t.n }}</div></div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasRange }}">
+          <div style="margin-top:16px">
+            <div style="font-size:12px;color:#6E685C">分子分類が確定した場合</div>
+            <sc-for list="{{ range }}" as="x" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dotted #CFC7B5"><span style="width:14px;height:4px;background:{{ x.dot }}"></span><span style="flex:1;font-size:14px">{{ x.cls }}</span><span style="font-size:14px;font-weight:700">{{ x.riskLabel }}</span></div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="margin-top:22px;display:flex;align-items:baseline;justify-content:space-between"><span style="font-family:'Noto Serif JP',serif;font-size:17px;font-weight:800">推奨される術後治療</span><span style="font-size:11px;color:#6E685C">エビデンス, 推奨度</span></div>
+        <sc-for list="{{ recs }}" as="r" hint-placeholder-count="2">
+          <div style="padding:13px 0;border-bottom:1px solid #DCD5C6;display:flex;gap:12px">
+            <span style="flex:none;font-family:'Noto Serif JP',serif;font-size:18px;font-weight:800;width:18px;color:{{ r.numFg }}">{{ r.num }}</span>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><span style="font-size:15px;line-height:1.45;font-weight:{{ r.tw }}">{{ r.t }}</span><span style="flex:none;font-size:12px;font-weight:700;padding:1px 6px;border:1px solid #1D1B16">{{ r.g }}</span></div>
+              <sc-if value="{{ r.hasN }}"><div style="font-size:12px;color:#6E685C;margin-top:4px;line-height:1.55">{{ r.n }}</div></sc-if>
+              <sc-if value="{{ r.hasTrials }}"><div style="font-size:11.5px;color:#2D3E7A;margin-top:4px;font-style:italic">{{ r.trials }}</div></sc-if>
+            </div>
+          </div>
+        </sc-for>
+
+        <sc-if value="{{ hasIci }}">
+          <div style="margin-top:16px;font-size:13px;line-height:1.65">{{ ici.main }}</div>
+          <div style="margin-top:10px;margin-left:14px;padding:12px 14px;background:#EDEAF3;border-left:3px solid #2D3E7A">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:800;color:#2D3E7A">サブ｜{{ ici.title }}</span><span style="font-size:12px;font-weight:700">{{ ici.g }}</span></div>
+            <div style="font-size:14px;font-weight:700;margin-top:6px;line-height:1.45">{{ ici.body }}</div>
+            <div style="font-size:11.5px;color:#4A463D;margin-top:6px;line-height:1.55;font-style:italic">{{ ici.trials }}</div>
+            <div style="font-size:12px;color:#9E2B25;margin-top:8px;font-weight:700">{{ ici.caveat }}</div>
+            <sc-if value="{{ iciProvisional }}"><div style="font-size:12px;color:#7A4E0E;margin-top:4px">MMRdが確定した場合のみ該当</div></sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasNotes }}">
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{ notes }}" as="n" hint-placeholder-count="1"><div style="font-size:12px;color:#6E685C;line-height:1.55">※ {{ n.t }}</div></sc-for>
+          </div>
+        </sc-if>
+        <div style="margin-top:14px;display:flex;align-items:center;gap:10px;font-size:12px;color:#6E685C"><span style="width:14px;height:4px;flex:none;background:{{ cp2020Dot }}"></span><span style="flex:1">参考：2020版 臨床病理学的分類</span><span style="font-weight:700;color:#1D1B16;font-size:13px">{{ cp2020 }}</span></div>
+
+        <div style="margin-top:24px;font-family:'Noto Serif JP',serif;font-size:15px;font-weight:800">判断の根拠となった入力</div>
+        <div style="margin-top:6px;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px">
+          <sc-for list="{{ summary }}" as="x" hint-placeholder-count="8">
+            <div style="display:contents"><span style="font-size:12px;color:#6E685C;padding:6px 0;border-bottom:1px dotted #CFC7B5">{{ x.k }}</span><span style="font-size:12.5px;font-weight:600;padding:6px 0;border-bottom:1px dotted #CFC7B5;text-align:right;color:{{ x.vColor }}">{{ x.v }}</span></div>
+          </sc-for>
+        </div>
+        <button onClick="{{ resetAll }}" style="margin-top:18px;width:100%;min-height:48px;border-radius:2px;border:1.5px solid #1D1B16;background:transparent;color:#1D1B16;font-weight:700">新しい症例</button>
+        <div style="margin-top:14px;font-size:10.5px;color:#8A8374;line-height:1.6">Concin N, et al. Lancet Oncol 2025;26:e423–35 ／ Int J Gynecol Cancer 2021;31:12–39</div>
+      </sc-if>
+    </div>
+  </div>
+
+  <button onClick="{{ toResult }}" style="flex:none;display:flex;align-items:center;gap:12px;border:none;border-top:2px solid #1D1B16;background:#FFFDF8;padding:10px 20px calc(env(safe-area-inset-bottom) + 10px);text-align:left;min-height:60px">
+    <span style="width:10px;align-self:stretch;flex:none;background:{{ riskBg }}"></span>
+    <span style="flex:1;min-width:0;display:flex;flex-direction:column">
+      <span style="font-size:11px;color:#6E685C">{{ stageLabel }}</span>
+      <span style="font-family:'Noto Serif JP',serif;font-size:17px;font-weight:800;color:#1D1B16">{{ riskLabel }}</span>
+    </span>
+    <span style="font-size:13px;font-weight:700;color:#2D3E7A">判定へ ↓</span>
+  </button>
+
+  <sc-if value="{{ showDisclaimer }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;background:#F6F3EC;display:flex;flex-direction:column;justify-content:center;padding:calc(env(safe-area-inset-top) + 20px) 26px calc(env(safe-area-inset-bottom) + 20px);z-index:10;gap:16px">
+      <div style="font-family:'Noto Serif JP',serif;font-size:30px;font-weight:800;line-height:1.2">新松戸中央<br>総合病院版</div>
+      <div style="height:2px;width:40px;background:#9E2B25"></div>
+      <div style="font-size:16px;font-weight:800">ご利用にあたって</div>
+      <div style="font-size:13px;line-height:1.75;color:#4A463D;display:flex;flex-direction:column;gap:8px">
+        <div>本アプリは婦人科腫瘍専門医向けの判断補助ツールです。最終的な治療方針は担当医およびキャンサーボードで決定してください。</div>
+        <div>ESGO–ESTRO–ESP 2025（FIGO 2023）に準拠します。術後補助療法としてのICIは国内保険適応外のため、該当部分は2021版の内容を主に表示し、2025版は補足として示します。</div>
+        <div>入力内容は端末外へ送信・保存されません。</div>
+      </div>
+      <button onClick="{{ agree }}" style="margin-top:8px;min-height:52px;border-radius:2px;border:none;background:#1D1B16;color:#F6F3EC;font-size:16px;font-weight:700">同意して開始</button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;demo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;startStep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[1,3],&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;},&quot;skipDisclaimer&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = window.ECEngine ? window.ECEngine.initState(this.props) : { s: {}, step: 1, agreed: true, wait: true };
+  scrollRef = React.createRef();
+  resultRef = React.createRef();
+  toResult = () => { const el = this.scrollRef.current, r = this.resultRef.current; if (el && r) el.scrollTo({ top: r.offsetTop - 8, behavior: 'smooth' }); };
+  componentDidMount() {
+    const jump = () => { if ((this.props.startStep || 1) === 3) setTimeout(() => { const el = this.scrollRef.current, r = this.resultRef.current; if (el && r) el.scrollTop = r.offsetTop - 8; }, 120); };
+    if (this.state.wait) this.t = setInterval(() => { if (window.ECEngine) { clearInterval(this.t); this.setState({ ...window.ECEngine.initState(this.props), wait: false }, jump); } }, 50);
+    else jump();
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const E = window.ECEngine;
+    if (!E || this.state.wait) return { scrollRef: this.scrollRef, resultRef: this.resultRef, notReady: true };
+    const ink = '#1D1B16';
+    const P = {
+      accent: '#9E2B25', track: '#DCD5C6', ink, sub: '#8A8374', onColor: ink, warn: '#B9791B', warnInk: '#9A5F0E',
+      doneMark: '済', todoMark: '未', doneColor: '#2D3E7A', todoColor: '#B5AD9C',
+      opt: (on, nd) => on ? (nd ? { bg: '#B9791B', fg: '#fff', bd: '1.5px solid #B9791B' } : { bg: ink, fg: '#F6F3EC', bd: '1.5px solid ' + ink })
+        : (nd ? { bg: 'transparent', fg: '#8A6A35', bd: '1.5px dashed #C9A970' } : { bg: '#FFFDF8', fg: ink, bd: '1.5px solid #CFC7B5' }),
+      tab: () => ({}),
+      mol: { POLE: '#2F7FB5', MMRd: '#3C8A56', NSMP_L: '#C79A22', NSMP_H: '#B8652A', P53: '#9E2B25' },
+      risk: {
+        LOW: { bg: '#3C7A4E', fg: '#fff' }, UNC_E: { bg: '#6E685C', fg: '#fff' }, INT: { bg: '#A57A10', fg: '#fff' },
+        HIR: { bg: '#B8562A', fg: '#fff' }, HIGH: { bg: '#9E2B25', fg: '#fff' }, UNC_A: { bg: '#6E685C', fg: '#fff' },
+        ADV: { bg: '#4A2F6B', fg: '#fff' }, NONE: { bg: '#B5AD9C', fg: ink },
+      },
+      rec: hl => ({ numFg: hl ? '#9E2B25' : '#B5AD9C', tw: hl ? '800' : '500' }),
+      test: strong => ({ tbadge: strong ? '強く推奨' : '推奨', tbadgeBg: strong ? '#B9791B' : '#8A8374' }),
+    };
+    const v = E.view(this, P);
+    return { scrollRef: this.scrollRef, resultRef: this.resultRef, toResult: this.toResult, ...v,
+      resetAll: () => { v.reset(); const el = this.scrollRef.current; if (el) el.scrollTop = 0; } };
+  }
+}
+</script>
+</body>
+</html>

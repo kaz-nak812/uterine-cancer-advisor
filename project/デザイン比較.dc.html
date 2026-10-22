@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><style>body{margin:0;background:#E9E7E2;font-family:-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif}a{color:#2a78d6}a:hover{color:#1d5aa6}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:12px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 12px/1.4 system-ui,sans-serif;color:rgba(0,0,0,.6)}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:26px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}</style></helmet>
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">子宮体癌 術後治療ナビ（新松戸中央総合病院版）― 見た目の異なる3案</span></div>
+  <div style="max-width:980px;margin:0 0 28px;font-size:13px;line-height:1.75;color:#3a3a3a;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px 28px">
+    <div><b>判定ロジック（3案共通）</b><br>分子分類（POLE→MMR→p53、NSMPはGrade＋ERで細分）→ 病理所見から FIGO 2023 病期を自動算出 → ESGO–ESTRO–ESP 2025 図3・4のリスク群 → 図5の推奨治療（エビデンス, 推奨度）。</div>
+    <div><b>「未実施」の扱い</b><br>未実施の検査は、取りうる分子分類をすべて計算し<b>最も高いリスクで暫定表示</b>。各分類のリスク一覧と「追加検査の推奨」を強調表示。I期低リスクでPOLEが方針に影響しない場合は「省略可（IV, C）」。</div>
+    <div><b>ICI</b><br>III–IVA期 MMRd（残存なし）は2021版と同じ化学療法／放射線療法を主表示し、2025版の「化学療法＋ICI（II, B）」をサブ枠で補足。残存腫瘍あり・IVBは進行癌一次治療（国内承認あり）として表示。</div>
+  </div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="1a">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>iOS標準 ― グループリスト＋下部タブ（分子／病理／判定）</div>
+      <div style="display:flex;gap:22px">
+        <div style="width:390px;height:844px;border-radius:56px;border:12px solid #111;background:#F2F2F5;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.18)">
+          <div style="flex:none;height:50px;background:#F2F2F5;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:15px;font-weight:600;color:#111"><span>9:41</span><span style="width:120px;height:34px;border-radius:20px;background:#000;position:absolute;left:50%;top:10px;transform:translateX(-50%)"></span><span>●●●</span></div>
+          <dc-import name="体癌術後ナビ 1a" demo="{{ true }}" skip-disclaimer="{{ true }}" start-step="{{ 1 }}" hint-size="100%,794px" style="position:relative;width:390px;height:794px"></dc-import>
+        </div>
+        <div style="width:390px;height:844px;border-radius:56px;border:12px solid #111;background:#F2F2F5;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.18)">
+          <div style="flex:none;height:50px;background:#F2F2F5;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:15px;font-weight:600;color:#111"><span>9:41</span><span style="width:120px;height:34px;border-radius:20px;background:#000;position:absolute;left:50%;top:10px;transform:translateX(-50%)"></span><span>●●●</span></div>
+          <dc-import name="体癌術後ナビ 1a" demo="{{ true }}" skip-disclaimer="{{ true }}" start-step="{{ 3 }}" hint-size="100%,794px" style="position:relative;width:390px;height:794px"></dc-import>
+        </div>
+      </div>
+    </div>
+    <div class="dv-opt" id="1b">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>ダーク・ウィザード ― 大きなタイル、色分け分子分類、下部「次へ」</div>
+      <div style="display:flex;gap:22px">
+        <div style="width:390px;height:844px;border-radius:56px;border:12px solid #111;background:#0E1113;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.18)">
+          <div style="flex:none;height:50px;background:#0E1113;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:15px;font-weight:600;color:#fff"><span>9:41</span><span style="width:120px;height:34px;border-radius:20px;background:#000;position:absolute;left:50%;top:10px;transform:translateX(-50%)"></span><span>●●●</span></div>
+          <dc-import name="体癌術後ナビ 1b" demo="{{ true }}" skip-disclaimer="{{ true }}" start-step="{{ 1 }}" hint-size="100%,794px" style="position:relative;width:390px;height:794px"></dc-import>
+        </div>
+        <div style="width:390px;height:844px;border-radius:56px;border:12px solid #111;background:#0E1113;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.18)">
+          <div style="flex:none;height:50px;background:#0E1113;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:15px;font-weight:600;color:#fff"><span>9:41</span><span style="width:120px;height:34px;border-radius:20px;background:#000;position:absolute;left:50%;top:10px;transform:translateX(-50%)"></span><span>●●●</span></div>
+          <dc-import name="体癌術後ナビ 1b" demo="{{ true }}" skip-disclaimer="{{ true }}" start-step="{{ 3 }}" hint-size="100%,794px" style="position:relative;width:390px;height:794px"></dc-import>
+        </div>
+      </div>
+    </div>
+    <div class="dv-opt" id="1c">
+      <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>紙カルテ ― 1画面スクロール、明朝見出し、下部に常時ライブ判定バー</div>
+      <div style="display:flex;gap:22px">
+        <div style="width:390px;height:844px;border-radius:56px;border:12px solid #111;background:#F6F3EC;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.18)">
+          <div style="flex:none;height:50px;background:#F6F3EC;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:15px;font-weight:600;color:#111"><span>9:41</span><span style="width:120px;height:34px;border-radius:20px;background:#000;position:absolute;left:50%;top:10px;transform:translateX(-50%)"></span><span>●●●</span></div>
+          <dc-import name="体癌術後ナビ 1c" demo="{{ true }}" skip-disclaimer="{{ true }}" start-step="{{ 1 }}" hint-size="100%,794px" style="position:relative;width:390px;height:794px"></dc-import>
+        </div>
+        <div style="width:390px;height:844px;border-radius:56px;border:12px solid #111;background:#F6F3EC;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.18)">
+          <div style="flex:none;height:50px;background:#F6F3EC;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:15px;font-weight:600;color:#111"><span>9:41</span><span style="width:120px;height:34px;border-radius:20px;background:#000;position:absolute;left:50%;top:10px;transform:translateX(-50%)"></span><span>●●●</span></div>
+          <dc-import name="体癌術後ナビ 1c" demo="{{ true }}" skip-disclaimer="{{ true }}" start-step="{{ 3 }}" hint-size="100%,794px" style="position:relative;width:390px;height:794px"></dc-import>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:34px;display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+    <span style="font-size:12px;color:rgba(0,0,0,.6)">ホーム画面アイコン（案ごと）</span>
+    <div style="display:flex;gap:18px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><img src="icon-a.png" alt="1a icon" style="width:76px;height:76px;border-radius:17px;box-shadow:0 2px 8px rgba(0,0,0,.15)"><span style="font-size:11px">体癌術後ナビ</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><img src="icon-b.png" alt="1b icon" style="width:76px;height:76px;border-radius:17px;box-shadow:0 2px 8px rgba(0,0,0,.15)"><span style="font-size:11px">体癌術後ナビ</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><img src="icon-c.png" alt="1c icon" style="width:76px;height:76px;border-radius:17px;box-shadow:0 2px 8px rgba(0,0,0,.15)"><span style="font-size:11px">体癌術後ナビ</span></div>
+    </div>
+  </div>
+  <p class="dv-next">次の例：「<a class="dv-oid" href="#1a">1a</a>で決定、配色は<a class="dv-oid" href="#1c">1c</a>寄りに」 ・「<a class="dv-oid" href="#1b">1b</a>のタイル入力を<a class="dv-oid" href="#1a">1a</a>に」 ・「症例の保存・PDF共有を追加」</p>
+</section>
+</x-dc>
+</body>
+</html>
